@@ -1,4 +1,22 @@
-import { compose, createStore, applyMiddleware } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from './root-reducer';
+
+import logger from 'redux-logger';
+
+const middleWares = [process.env.NODE_ENV === 'development' && logger].filter(
+  Boolean
+);
+
+// takes place of createStore
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(middleWares),
+});
+
+/*import { compose, createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import logger from 'redux-logger';
@@ -32,3 +50,4 @@ export const store = createStore(
 );
 
 export const persistor = persistStore(store);
+*/

@@ -1,16 +1,23 @@
-import { USER_ACTION_TYPES } from './user.types';
+import { createSlice } from '@reduxjs/toolkit';
 
 const INITIAL_STATE = {
   currentUser: null,
 };
 
-export const userReducer = (state = INITIAL_STATE, action) => {
-  const { type, payload } = action;
-
-  switch (type) {
-    case USER_ACTION_TYPES.SET_CURRENT_USER:
-      return { ...state, currentUser: payload };
-    default:
-      return state;
+// createSlice namespaces actions for us
+// creates reducer as well as actions and action types
+export const userSlice = createSlice({
+  name: 'user',
+  initialState: INITIAL_STATE,
+  reducers: {
+    setCurrentUser(state, action) {
+      // mutationesque, but under the hood, this is still returning a new object
+      // we're not mutating the state
+      state.currentUser = action.payload
+    }
   }
-};
+});
+
+export const { setCurrentUser } = userSlice.actions;
+
+export const userReducer = userSlice.reducer;
